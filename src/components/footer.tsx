@@ -9,7 +9,7 @@ export function Footer() {
             <Link href="/" aria-label="BEYBE · Inicio">
               <Brand />
             </Link>
-            <p>Pequeños comienzos. Mucho amor.</p>
+            <p>Vistiendo al futuro.</p>
           </div>
           <nav aria-label="Explorá">
             <h2>Explorá</h2>

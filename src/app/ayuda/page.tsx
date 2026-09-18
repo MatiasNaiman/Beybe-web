@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { whatsappUrl } from "@/lib/commerce";
+import { whatsappNumber } from "@/lib/store-config";
 export const metadata = { title: "Cómo comprar" };
 export default function Help() {
   const contact = whatsappUrl(
-    process.env.NEXT_PUBLIC_WHATSAPP_NUMBER,
+    whatsappNumber,
     "Hola BEYBE, quisiera hacer una consulta.",
   );
   return (
@@ -11,22 +12,23 @@ export default function Help() {
       <p className="eyebrow">Te acompañamos</p>
       <h1>Comprar, con tranquilidad.</h1>
       <p className="lead">
-        Estamos preparando nuestra tienda online. Acá podés conocer cómo va a
-        funcionar.
+        Podés recorrer la tienda y probar sus bolsas. La compra real y los
+        cobros todavía no están habilitados.
       </p>
       <section>
         <h2>Para tu bebé</h2>
         <p>
-          La compra minorista tendrá un mínimo de $50.000. Podrás elegir las
-          variantes disponibles y reunir tus artículos en la bolsa.
+          La compra minorista tiene un mínimo de $50.000. Elegí las variantes y
+          presentaciones disponibles y reuní tus artículos en la bolsa.
         </p>
       </section>
       <section>
         <h2>Para tu negocio</h2>
         <p>
-          El pedido mayorista tendrá un mínimo de $150.000. La selección se
-          enviará por WhatsApp para confirmar disponibilidad y coordinar la
-          compra.
+          El pedido mayorista tiene un mínimo de $150.000. La selección abre un
+          borrador en WhatsApp para consultar disponibilidad, envío y pago. Los
+          artículos demostrativos generan un borrador de prueba claramente
+          identificado.
         </p>
         <Link className="text-link" href="/mayoristas">
           Conocé la venta mayorista →

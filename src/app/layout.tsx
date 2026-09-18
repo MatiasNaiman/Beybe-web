@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 import "@fontsource-variable/dm-sans/wght.css";
 import "@fontsource-variable/lora/wght.css";
 import "./globals.css";
+import "./shop.css";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { ShopProvider } from "@/components/shop-provider";
+import { catalog } from "@/lib/catalog";
 export const metadata: Metadata = {
   title: {
-    default: "BEYBE · Pequeños comienzos. Mucho amor.",
+    default: "BEYBE · Vistiendo al futuro",
     template: "%s · BEYBE",
   },
   description:
@@ -15,11 +17,12 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
   icons: { icon: "/brand/logo.svg" },
 };
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const isDemo = (await catalog.list()).some((p) => p.demo);
   return (
     <html lang="es-AR">
       <body>
@@ -28,6 +31,12 @@ export default function RootLayout({
             Ir al contenido
           </a>
           <Header />
+          {isDemo && (
+            <div className="demo-banner">
+              <strong>Tienda demostrativa</strong>
+              <span>Artículos, precios y stock ficticios · Sin cobros</span>
+            </div>
+          )}
           <main id="contenido">{children}</main>
           <Footer />
         </ShopProvider>

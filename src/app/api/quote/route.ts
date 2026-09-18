@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { catalog } from "@/lib/catalog";
+import { whatsappNumber } from "@/lib/store-config";
 import {
   requestSchema,
   quoteCart,
@@ -33,10 +34,7 @@ export async function POST(request: NextRequest) {
   const quote = quoteCart(lines, channel, await catalog.list());
   const contactUrl =
     channel === "mayorista" && quote.canRequest
-      ? whatsappUrl(
-          process.env.NEXT_PUBLIC_WHATSAPP_NUMBER,
-          orderMessage(quote, channel),
-        )
+      ? whatsappUrl(whatsappNumber, orderMessage(quote, channel))
       : null;
   return NextResponse.json({ ...quote, contactUrl }, { headers });
 }

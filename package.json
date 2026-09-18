@@ -9,11 +9,16 @@
     "typecheck": "tsc --noEmit",
     "test": "tsx --test tests/*.test.ts",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "catalog:validate": "tsx scripts/import-catalog.ts",
+    "catalog:import": "tsx scripts/import-catalog.ts",
+    "test:integration": "tsx --test tests/integration/*.test.ts"
   },
   "dependencies": {
     "@fontsource-variable/dm-sans": "^5.2.0",
     "@fontsource-variable/lora": "^5.2.0",
+    "@gsap/react": "^2.1.2",
+    "gsap": "^3.15.0",
     "lucide-react": "^0.577.0",
     "next": "16.3.5",
     "react": "^19.2.0",

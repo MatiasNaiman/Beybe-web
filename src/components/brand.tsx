@@ -8,6 +8,7 @@ export function Brand({ hero = false }: { hero?: boolean }) {
       alt="BEYBE"
       className={hero ? "brand brand-hero" : "brand"}
       priority={hero}
+      loading="eager"
     />
   );
 }

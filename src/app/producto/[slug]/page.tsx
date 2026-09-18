@@ -1,9 +1,16 @@
 import { notFound } from "next/navigation";
-import Image from "next/image";
 import Link from "next/link";
 import { catalog } from "@/lib/catalog";
 import { channelFrom } from "@/lib/commerce";
 import { ProductPurchase } from "@/components/product-purchase";
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const p = await catalog.find((await params).slug);
+  return { title: p?.name ?? "Artículo no encontrado" };
+}
 export default async function ProductPage({
   params,
   searchParams,
@@ -17,34 +24,23 @@ export default async function ProductPage({
   return (
     <div className="container page-section">
       <div className="breadcrumb">
-        <Link href={`/catalogo?modalidad=${channel}`}>Catálogo</Link>
+        <Link href={"/catalogo?modalidad=" + channel}>Catálogo</Link>
+        <span>/</span>
+        <Link
+          href={
+            "/catalogo?modalidad=" + channel + "&categoria=" + product.category
+          }
+        >
+          Categoría
+        </Link>
         <span>/</span>
         <span>{product.name}</span>
       </div>
-      <div className="product-detail">
-        <div className="product-gallery">
-          {product.images.map((im, i) => (
-            <Image
-              key={im.src}
-              src={im.src}
-              alt={im.alt}
-              width={900}
-              height={1000}
-              priority={i === 0}
-            />
-          ))}
-        </div>
-        <div>
-          <p className="eyebrow">BEYBE · Fabricación propia</p>
-          <h1>{product.name}</h1>
-          <p className="lead">{product.description}</p>
-          <ProductPurchase product={product} channel={channel} />
-          <p className="muted">
-            Modalidad {channel}. Precios en pesos argentinos. Envío y forma de
-            pago a confirmar.
-          </p>
-        </div>
-      </div>
+      <ProductPurchase
+        key={product.id + channel}
+        product={product}
+        channel={channel}
+      />
     </div>
   );
 }

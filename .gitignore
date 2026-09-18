@@ -7,3 +7,4 @@ out/
 *.log
 public/images/categories/*.jpg
 public/images/categories/mantillas.webp
+.catalog-backups/

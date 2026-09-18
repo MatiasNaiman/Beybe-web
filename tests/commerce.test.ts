@@ -1,117 +1,214 @@
-import test from "node:test";
+import { test } from "node:test";
 import assert from "node:assert/strict";
+import data from "../src/data/products.json";
 import {
+  catalogSchema,
+  productSchema,
   quoteCart,
   requestSchema,
-  productSchema,
-  whatsappUrl,
   orderMessage,
-  type Product,
+  whatsappUrl,
   type CartLine,
+  type Product,
 } from "../src/lib/commerce";
-const product: Product = {
-  id: "test",
-  slug: "articulo-de-prueba",
-  name: "Artículo de prueba",
-  description: "Solo para tests, no es un producto comercial.",
-  category: "ropa",
-  images: [{ src: "/products/test.webp", alt: "Prueba" }],
-  variants: [
-    {
-      id: "v1",
-      sku: "TEST-001",
-      label: "Talle de prueba",
-      stock: 100,
-      sales: {
-        minorista: { price: 1_000_000, minQuantity: 1, step: 1 },
-        mayorista: { price: 750_000, minQuantity: 4, step: 2 },
-      },
-    },
-  ],
-};
-const line = (quantity: number): CartLine => ({
-  productId: "test",
-  variantId: "v1",
-  quantity,
+const products = catalogSchema.parse(data);
+const line = (
+  productId = "demo-001",
+  variantId = "crudo-rn",
+  presentationId = "set",
+  quantity = 1,
+): CartLine => ({ productId, variantId, presentationId, quantity });
+test("8 ejemplos válidos, seis categorías y exclusividad mayorista", () => {
+  assert.equal(products.length, 8);
+  assert.equal(new Set(products.map((p) => p.category)).size, 6);
+  assert.equal(products[5].retailEnabled, false);
 });
-test("minorista: bloquea antes de $50.000 y acepta el límite exacto", () => {
+test("mínimo minorista exacto, debajo y arriba", () => {
+  assert.equal(quoteCart([line()], "minorista", products).remaining, 2500000);
   assert.equal(
-    quoteCart([line(4)], "minorista", [product]).remaining,
-    1_000_000,
+    quoteCart([line(undefined, undefined, undefined, 2)], "minorista", products)
+      .canRequest,
+    true,
   );
-  assert.equal(quoteCart([line(4)], "minorista", [product]).canRequest, false);
-  assert.equal(quoteCart([line(5)], "minorista", [product]).canRequest, true);
+  assert.equal(
+    quoteCart([line(undefined, undefined, undefined, 3)], "minorista", products)
+      .total,
+    7500000,
+  );
 });
-test("mayorista: exige $150.000 e incrementos de la variante", () => {
-  assert.equal(quoteCart([line(18)], "mayorista", [product]).canRequest, false);
-  assert.equal(quoteCart([line(20)], "mayorista", [product]).canRequest, true);
-  assert.equal(quoteCart([line(21)], "mayorista", [product]).errors.length, 1);
+test("mínimo mayorista independiente, precios por pack", () => {
+  const below = quoteCart(
+    [line(undefined, undefined, "pack3", 2)],
+    "mayorista",
+    products,
+  );
+  assert.equal(below.total, 12000000);
+  assert.equal(below.canRequest, false);
+  assert.equal(
+    quoteCart([line(undefined, undefined, "pack3", 3)], "mayorista", products)
+      .canRequest,
+    true,
+  );
 });
-test("rechaza cantidades fraccionarias, negativas, sin stock o inferiores al paquete", () => {
-  for (const n of [-1, 0, 1.5, 101, Infinity])
-    assert.equal(
-      quoteCart([line(n)], "minorista", [product]).canRequest,
-      false,
-    );
-  assert.equal(quoteCart([line(2)], "mayorista", [product]).errors.length, 1);
+test("mínimo mayorista exacto", () => {
+  const p = structuredClone(products);
+  p[0].variants[0].sales.mayorista![0].price = 5000000;
+  assert.equal(
+    quoteCart([line(undefined, undefined, "pack3", 3)], "mayorista", p)
+      .remaining,
+    0,
+  );
 });
-test("un artículo desconocido invalida el pedido completo", () => {
-  const quote = quoteCart(
-    [line(5), { productId: "missing", variantId: "x", quantity: 1 }],
+test("cliente no elige precios, subtotales, demo ni mínimos", () => {
+  const r = requestSchema.parse({
+    channel: "minorista",
+    lines: [
+      { ...line(undefined, undefined, undefined, 2), price: 1, total: 1 },
+    ],
+    minimum: 1,
+    demo: false,
+  });
+  assert.equal(quoteCart(r.lines, r.channel, products).total, 5000000);
+  assert.equal(quoteCart(r.lines, r.channel, products).demo, true);
+});
+test("canales y presentaciones no se mezclan", () => {
+  assert.equal(
+    quoteCart([line(undefined, undefined, "pack3", 3)], "minorista", products)
+      .canRequest,
+    false,
+  );
+  assert.equal(
+    quoteCart(
+      [line("demo-006", "surtido", "surtido12", 6)],
+      "minorista",
+      products,
+    ).canRequest,
+    false,
+  );
+});
+test("stock compartido entre unidad y pack en la misma variante", () => {
+  const q = quoteCart(
+    [
+      line("demo-007", "crudo", "duo", 10),
+      line("demo-007", "crudo", "pack6", 2),
+    ],
     "minorista",
-    [product],
+    products,
   );
-  assert.equal(quote.total, 5_000_000);
-  assert.equal(quote.canRequest, false);
-});
-test("no duplica stock ni importe con líneas repetidas", () => {
-  const q = quoteCart([line(5), line(5)], "minorista", [product]);
-  assert.equal(q.items.length, 1);
+  assert.ok(q.errors.some((e) => e.includes("stock compartido")));
   assert.equal(q.canRequest, false);
 });
-test("toma el precio del catálogo, no del navegador", () => {
-  const input = requestSchema.parse({
-    channel: "minorista",
-    lines: [{ ...line(5), price: 1, total: 5 }],
-  });
+test("variantes tienen stock independiente", () => {
   assert.equal(
-    quoteCart(input.lines, input.channel, [product]).total,
-    5_000_000,
+    quoteCart(
+      [
+        line("demo-003", "crudo", "unidad", 10),
+        line("demo-003", "agua", "unidad", 10),
+      ],
+      "minorista",
+      products,
+    ).canRequest,
+    true,
   );
 });
-test("bolsa vacía no permite confirmar", () =>
-  assert.equal(quoteCart([], "minorista", [product]).canRequest, false));
-test("respeta disponibilidad por modalidad", () => {
-  const retailOnly = structuredClone(product);
-  delete retailOnly.variants[0].sales.mayorista;
+test("stock expresado en unidades, no packs", () => {
   assert.equal(
-    quoteCart([line(20)], "mayorista", [retailOnly]).canRequest,
+    quoteCart([line("demo-002", "agua-3m", "pack6", 3)], "mayorista", products)
+      .canRequest,
     false,
   );
 });
-test("valida importaciones de catálogo y límites del pedido", () => {
-  assert.equal(productSchema.safeParse(product).success, true);
+test("mínimo e incremento de surtidos", () => {
   assert.equal(
-    requestSchema.safeParse({ channel: "otro", lines: [] }).success,
+    quoteCart(
+      [line("demo-006", "surtido", "surtido12", 5)],
+      "mayorista",
+      products,
+    ).canRequest,
     false,
   );
   assert.equal(
-    requestSchema.safeParse({
-      channel: "minorista",
-      lines: Array(251).fill(line(1)),
-    }).success,
+    quoteCart(
+      [line("demo-006", "surtido", "surtido12", 6)],
+      "mayorista",
+      products,
+    ).canRequest,
+    true,
+  );
+});
+test("agotado, inactivo, desconocido y bolsa vacía bloquean", () => {
+  const p = structuredClone(products);
+  p[0].active = false;
+  assert.equal(
+    quoteCart([line(undefined, undefined, undefined, 2)], "minorista", p)
+      .canRequest,
+    false,
+  );
+  for (const lines of [
+    [],
+    [line("unknown")],
+    [line("demo-008", "crudo", "unidad", 10)],
+  ])
+    assert.equal(quoteCart(lines, "minorista", products).canRequest, false);
+});
+test("cantidades inválidas y duplicados", () => {
+  for (const quantity of [-1, 0, 1.5, 1000, NaN])
+    assert.equal(
+      quoteCart(
+        [line(undefined, undefined, undefined, quantity)],
+        "minorista",
+        products,
+      ).canRequest,
+      false,
+    );
+  assert.equal(
+    quoteCart([line(), line()], "minorista", products).canRequest,
     false,
   );
 });
-test("WhatsApp no inventa contactos y codifica el contenido", () => {
-  assert.equal(whatsappUrl(undefined, "hola"), null);
-  assert.equal(whatsappUrl("abc", "hola"), null);
-  const q = quoteCart([line(20)], "mayorista", [product]);
+test("disponibilidad a consultar solo mayorista, sin inventar stock", () => {
+  const p = structuredClone(products);
+  p[0].variants[0].stock = null;
+  p[0].variants[0].availability = "on_request";
+  assert.equal(
+    quoteCart([line(undefined, undefined, undefined, 2)], "minorista", p)
+      .canRequest,
+    false,
+  );
+  assert.equal(
+    quoteCart([line(undefined, undefined, "pack3", 3)], "mayorista", p)
+      .canRequest,
+    true,
+  );
+});
+test("importación rechaza códigos repetidos, mezcla real/demo y formatos incoherentes", () => {
+  assert.equal(
+    catalogSchema.safeParse([...products, products[0]]).success,
+    false,
+  );
+  const p = structuredClone(products);
+  p[0].demo = false;
+  assert.equal(catalogSchema.safeParse(p).success, false);
+  p[0].variants[0].sales.minorista![0].units = 12;
+  assert.equal(productSchema.safeParse(p[0]).success, false);
+});
+test("pedido WhatsApp identifica prueba, códigos, presentación, unidades y total", () => {
+  const q = quoteCart(
+    [line(undefined, undefined, "pack3", 3)],
+    "mayorista",
+    products,
+  );
   const message = orderMessage(q, "mayorista");
-  assert.ok(message.includes("no una compra confirmada"));
-  assert.ok(
-    whatsappUrl("5491100000000", message)?.includes(
-      encodeURIComponent("SKU TEST-001"),
-    ),
-  );
+  for (const token of [
+    "NO ES UN PEDIDO REAL",
+    "DEMO-001",
+    "9 unidades",
+    "Pack de 3 sets",
+    "180.000",
+    "disponibilidad, envío y pago",
+  ])
+    assert.ok(message.includes(token));
+  const url = whatsappUrl("5491132051182", message);
+  assert.equal(new URL(url!).searchParams.get("text"), message);
+  assert.equal(whatsappUrl("bad", message), null);
 });

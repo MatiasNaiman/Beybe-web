@@ -1,1 +1,550 @@
-[]
+[
+  {
+    "id": "demo-001",
+    "sku": "DEMO-001",
+    "slug": "set-bienvenida",
+    "name": "Set de bienvenida",
+    "description": "Un conjunto de ejemplo para explorar la compra por set y por pack.",
+    "category": "ajuar",
+    "active": true,
+    "demo": true,
+    "retailEnabled": true,
+    "images": [],
+    "variants": [
+      {
+        "id": "crudo-rn",
+        "sku": "DEMO-001-CRUDO-RN",
+        "label": "Crudo · Recién nacido",
+        "options": {
+          "Color": "Crudo",
+          "Talle": "RN"
+        },
+        "stock": 36,
+        "availability": "available",
+        "sales": {
+          "minorista": [
+            {
+              "id": "set",
+              "label": "Set individual",
+              "kind": "unidad",
+              "units": 1,
+              "price": 2500000,
+              "minQuantity": 1,
+              "step": 1
+            }
+          ],
+          "mayorista": [
+            {
+              "id": "pack3",
+              "label": "Pack de 3 sets",
+              "kind": "pack",
+              "units": 3,
+              "price": 6000000,
+              "minQuantity": 1,
+              "step": 1
+            }
+          ]
+        }
+      },
+      {
+        "id": "agua-1m",
+        "sku": "DEMO-001-AGUA-1M",
+        "label": "Verde agua · 1 mes",
+        "options": {
+          "Color": "Verde agua",
+          "Talle": "1 mes"
+        },
+        "stock": 24,
+        "availability": "available",
+        "sales": {
+          "minorista": [
+            {
+              "id": "set",
+              "label": "Set individual",
+              "kind": "unidad",
+              "units": 1,
+              "price": 2500000,
+              "minQuantity": 1,
+              "step": 1
+            }
+          ],
+          "mayorista": [
+            {
+              "id": "pack3",
+              "label": "Pack de 3 sets",
+              "kind": "pack",
+              "units": 3,
+              "price": 6000000,
+              "minQuantity": 1,
+              "step": 1
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "demo-002",
+    "sku": "DEMO-002",
+    "slug": "body-cruzado",
+    "name": "Body cruzado",
+    "description": "Ejemplo con talles y colores independientes. Cada combinación tiene su propio código y stock.",
+    "category": "ropa",
+    "active": true,
+    "demo": true,
+    "retailEnabled": true,
+    "images": [],
+    "variants": [
+      {
+        "id": "crudo-1m",
+        "sku": "DEMO-002-CRUDO-1M",
+        "label": "Crudo · 1 mes",
+        "options": {
+          "Color": "Crudo",
+          "Talle": "1 mes"
+        },
+        "stock": 48,
+        "availability": "available",
+        "sales": {
+          "minorista": [
+            {
+              "id": "unidad",
+              "label": "Unidad",
+              "kind": "unidad",
+              "units": 1,
+              "price": 1250000,
+              "minQuantity": 1,
+              "step": 1
+            },
+            {
+              "id": "duo",
+              "label": "Pack de 2",
+              "kind": "pack",
+              "units": 2,
+              "price": 2350000,
+              "minQuantity": 1,
+              "step": 1
+            }
+          ],
+          "mayorista": [
+            {
+              "id": "pack6",
+              "label": "Pack de 6",
+              "kind": "pack",
+              "units": 6,
+              "price": 5400000,
+              "minQuantity": 1,
+              "step": 1
+            }
+          ]
+        }
+      },
+      {
+        "id": "durazno-3m",
+        "sku": "DEMO-002-DURAZNO-3M",
+        "label": "Durazno · 3 meses",
+        "options": {
+          "Color": "Durazno",
+          "Talle": "3 meses"
+        },
+        "stock": 30,
+        "availability": "available",
+        "sales": {
+          "minorista": [
+            {
+              "id": "unidad",
+              "label": "Unidad",
+              "kind": "unidad",
+              "units": 1,
+              "price": 1250000,
+              "minQuantity": 1,
+              "step": 1
+            },
+            {
+              "id": "duo",
+              "label": "Pack de 2",
+              "kind": "pack",
+              "units": 2,
+              "price": 2350000,
+              "minQuantity": 1,
+              "step": 1
+            }
+          ],
+          "mayorista": [
+            {
+              "id": "pack6",
+              "label": "Pack de 6",
+              "kind": "pack",
+              "units": 6,
+              "price": 5400000,
+              "minQuantity": 1,
+              "step": 1
+            }
+          ]
+        }
+      },
+      {
+        "id": "agua-3m",
+        "sku": "DEMO-002-AGUA-3M",
+        "label": "Verde agua · 3 meses",
+        "options": {
+          "Color": "Verde agua",
+          "Talle": "3 meses"
+        },
+        "stock": 12,
+        "availability": "available",
+        "sales": {
+          "minorista": [
+            {
+              "id": "unidad",
+              "label": "Unidad",
+              "kind": "unidad",
+              "units": 1,
+              "price": 1250000,
+              "minQuantity": 1,
+              "step": 1
+            },
+            {
+              "id": "duo",
+              "label": "Pack de 2",
+              "kind": "pack",
+              "units": 2,
+              "price": 2350000,
+              "minQuantity": 1,
+              "step": 1
+            }
+          ],
+          "mayorista": [
+            {
+              "id": "pack6",
+              "label": "Pack de 6",
+              "kind": "pack",
+              "units": 6,
+              "price": 5400000,
+              "minQuantity": 1,
+              "step": 1
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "demo-003",
+    "sku": "DEMO-003",
+    "slug": "toalla-capucha",
+    "name": "Toalla con capucha",
+    "description": "Artículo ficticio para probar presentaciones y cantidades. Fotografías definitivas pendientes.",
+    "category": "bano",
+    "active": true,
+    "demo": true,
+    "retailEnabled": true,
+    "images": [],
+    "variants": [
+      {
+        "id": "crudo",
+        "sku": "DEMO-003-CRUDO",
+        "label": "Crudo",
+        "options": {
+          "Color": "Crudo"
+        },
+        "stock": 18,
+        "availability": "available",
+        "sales": {
+          "minorista": [
+            {
+              "id": "unidad",
+              "label": "Unidad",
+              "kind": "unidad",
+              "units": 1,
+              "price": 2200000,
+              "minQuantity": 1,
+              "step": 1
+            }
+          ],
+          "mayorista": [
+            {
+              "id": "pack3",
+              "label": "Pack de 3",
+              "kind": "pack",
+              "units": 3,
+              "price": 5100000,
+              "minQuantity": 1,
+              "step": 1
+            }
+          ]
+        }
+      },
+      {
+        "id": "agua",
+        "sku": "DEMO-003-AGUA",
+        "label": "Verde agua",
+        "options": {
+          "Color": "Verde agua"
+        },
+        "stock": 12,
+        "availability": "available",
+        "sales": {
+          "minorista": [
+            {
+              "id": "unidad",
+              "label": "Unidad",
+              "kind": "unidad",
+              "units": 1,
+              "price": 2200000,
+              "minQuantity": 1,
+              "step": 1
+            }
+          ],
+          "mayorista": [
+            {
+              "id": "pack3",
+              "label": "Pack de 3",
+              "kind": "pack",
+              "units": 3,
+              "price": 5100000,
+              "minQuantity": 1,
+              "step": 1
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "demo-004",
+    "sku": "DEMO-004",
+    "slug": "mantilla-suave",
+    "name": "Mantilla suave",
+    "description": "Ejemplo de artículo sin opciones de talle ni color: una única variante.",
+    "category": "mantillas",
+    "active": true,
+    "demo": true,
+    "retailEnabled": true,
+    "images": [],
+    "variants": [
+      {
+        "id": "unica",
+        "sku": "DEMO-004-UNICA",
+        "label": "Única",
+        "options": {},
+        "stock": 20,
+        "availability": "available",
+        "sales": {
+          "minorista": [
+            {
+              "id": "unidad",
+              "label": "Unidad",
+              "kind": "unidad",
+              "units": 1,
+              "price": 1800000,
+              "minQuantity": 1,
+              "step": 1
+            }
+          ],
+          "mayorista": [
+            {
+              "id": "pack4",
+              "label": "Pack de 4",
+              "kind": "pack",
+              "units": 4,
+              "price": 5600000,
+              "minQuantity": 1,
+              "step": 1
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "demo-005",
+    "sku": "DEMO-005",
+    "slug": "baberos-trio",
+    "name": "Baberos en trío",
+    "description": "El canal minorista ofrece un trío; el mayorista, docenas. La cantidad cuenta presentaciones completas.",
+    "category": "baberos",
+    "active": true,
+    "demo": true,
+    "retailEnabled": true,
+    "images": [],
+    "variants": [
+      {
+        "id": "neutros",
+        "sku": "DEMO-005-NEUTROS",
+        "label": "Tonos neutros",
+        "options": {
+          "Composición": "Mismo surtido neutro"
+        },
+        "stock": 120,
+        "availability": "available",
+        "sales": {
+          "minorista": [
+            {
+              "id": "trio",
+              "label": "Pack de 3",
+              "kind": "pack",
+              "units": 3,
+              "price": 1500000,
+              "minQuantity": 1,
+              "step": 1
+            }
+          ],
+          "mayorista": [
+            {
+              "id": "docena",
+              "label": "Docena de 12",
+              "kind": "docena",
+              "units": 12,
+              "price": 4800000,
+              "minQuantity": 1,
+              "step": 1
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "demo-006",
+    "sku": "DEMO-006",
+    "slug": "gorritos-surtidos",
+    "name": "Gorritos surtidos",
+    "description": "Exclusivo mayorista. Surtido fijo de ejemplo: 4 crudos, 4 verdes agua y 4 durazno por presentación. No se desarma.",
+    "category": "gorritos",
+    "active": true,
+    "demo": true,
+    "retailEnabled": false,
+    "images": [],
+    "variants": [
+      {
+        "id": "surtido",
+        "sku": "DEMO-006-SURTIDO",
+        "label": "Surtido fijo",
+        "options": {
+          "Surtido": "4 crudos + 4 verdes agua + 4 durazno"
+        },
+        "stock": 120,
+        "availability": "available",
+        "sales": {
+          "mayorista": [
+            {
+              "id": "surtido12",
+              "label": "Surtido de 12",
+              "kind": "surtido",
+              "units": 12,
+              "price": 3600000,
+              "minQuantity": 2,
+              "step": 2
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "demo-007",
+    "sku": "DEMO-007",
+    "slug": "babitas-duo",
+    "name": "Babitas en dúo",
+    "description": "Ejemplo con stock limitado compartido entre distintas presentaciones.",
+    "category": "baberos",
+    "active": true,
+    "demo": true,
+    "retailEnabled": true,
+    "images": [],
+    "variants": [
+      {
+        "id": "crudo",
+        "sku": "DEMO-007-CRUDO",
+        "label": "Crudo",
+        "options": {
+          "Color": "Crudo"
+        },
+        "stock": 24,
+        "availability": "available",
+        "sales": {
+          "minorista": [
+            {
+              "id": "duo",
+              "label": "Pack de 2",
+              "kind": "pack",
+              "units": 2,
+              "price": 1000000,
+              "minQuantity": 1,
+              "step": 1
+            },
+            {
+              "id": "pack6",
+              "label": "Pack de 6",
+              "kind": "pack",
+              "units": 6,
+              "price": 2700000,
+              "minQuantity": 1,
+              "step": 1
+            }
+          ],
+          "mayorista": [
+            {
+              "id": "docena",
+              "label": "Docena de 12",
+              "kind": "docena",
+              "units": 12,
+              "price": 4200000,
+              "minQuantity": 1,
+              "step": 1
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "demo-008",
+    "sku": "DEMO-008",
+    "slug": "gorrito-nudo",
+    "name": "Gorrito con nudo",
+    "description": "Artículo demostrativo agotado para verificar los estados de disponibilidad.",
+    "category": "gorritos",
+    "active": true,
+    "demo": true,
+    "retailEnabled": true,
+    "images": [],
+    "variants": [
+      {
+        "id": "crudo",
+        "sku": "DEMO-008-CRUDO",
+        "label": "Crudo",
+        "options": {
+          "Color": "Crudo"
+        },
+        "stock": 0,
+        "availability": "unavailable",
+        "sales": {
+          "minorista": [
+            {
+              "id": "unidad",
+              "label": "Unidad",
+              "kind": "unidad",
+              "units": 1,
+              "price": 700000,
+              "minQuantity": 1,
+              "step": 1
+            }
+          ],
+          "mayorista": [
+            {
+              "id": "pack6",
+              "label": "Pack de 6",
+              "kind": "pack",
+              "units": 6,
+              "price": 3000000,
+              "minQuantity": 1,
+              "step": 1
+            }
+          ]
+        }
+      }
+    ]
+  }
+]

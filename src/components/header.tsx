@@ -98,7 +98,7 @@ export function Header() {
             Cómo comprar <span aria-hidden="true">↗</span>
           </Link>
         </nav>
-        <p className="muted">Pequeños comienzos. Mucho amor.</p>
+        <p className="muted">Vistiendo al futuro.</p>
       </dialog>
     </>
   );

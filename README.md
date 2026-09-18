@@ -66,3 +66,6 @@ No crea pedidos, no reserva stock ni cobra. WhatsApp abre un borrador que el cli
 
 El contrato de pagos está preparado en `src/lib/payments.ts`; **ningún medio de pago está integrado ni habilitado**.
 No se ha publicado la tienda ni contratado servicios. No hay datos personales, secretos ni tokens en este repositorio.
+# Estado actual
+
+La fase de catálogo demostrativo y carritos está implementada. Ver [estado y pasos para retomar](docs/estado-fase-demo.md), incluyendo pruebas y pendientes. Las notas anteriores sobre catálogo vacío describen la primera entrega.

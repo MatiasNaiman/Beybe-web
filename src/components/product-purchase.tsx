@@ -1,81 +1,136 @@
 "use client";
-import { useState } from "react";
 import Link from "next/link";
-import { useShop } from "./shop-provider";
-import { formatMoney, type Product, type Channel } from "@/lib/commerce";
+import { ShoppingBag, Check, ArrowRight } from "lucide-react";
+import {
+  formatMoney,
+  offers,
+  type Product,
+  type Channel,
+} from "@/lib/commerce";
+import { ProductGallery } from "./product-gallery";
+import { PurchaseOptions } from "./purchase-options";
+import { useProductSelection } from "./use-product-selection";
 export function ProductPurchase({
-  product,
+  product: p,
   channel,
 }: {
   product: Product;
   channel: Channel;
 }) {
-  const options = product.variants.filter((v) => v.sales[channel]);
-  const [variantId, setVariantId] = useState(options[0]?.id ?? "");
-  const [added, setAdded] = useState(false);
-  const { carts, setQuantity, ready } = useShop();
-  const variant = options.find((v) => v.id === variantId);
-  const sale = variant?.sales[channel];
-  if (!variant || !sale)
-    return <p>Este artículo no está disponible en esta modalidad.</p>;
-  const current =
-    carts[channel].find(
-      (i) => i.productId === product.id && i.variantId === variant.id,
-    )?.quantity ?? 0;
-  const nextQuantity = current ? current + sale.step : sale.minQuantity;
+  const s = useProductSelection(p, channel),
+    { variant, sale } = s;
   return (
-    <div className="purchase-panel">
-      <p className="product-price">
-        {formatMoney(sale.price)} <small>por unidad</small>
-      </p>
-      <label htmlFor="variant">Elegí una variante</label>
-      <select
-        id="variant"
-        value={variantId}
-        onChange={(e) => {
-          setVariantId(e.target.value);
-          setAdded(false);
-        }}
-      >
-        {options.map((v) => (
-          <option key={v.id} value={v.id}>
-            {v.label}
-            {v.stock === 0 ? " · Sin stock" : ""}
-          </option>
-        ))}
-      </select>
-      <p className="muted">
-        Mínimo {sale.minQuantity} unidad{sale.minQuantity > 1 ? "es" : ""}.
-        Incrementos de {sale.step}.
-      </p>
-      <button
-        className="button"
-        disabled={!ready || nextQuantity > variant.stock}
-        onClick={() => {
-          setQuantity(channel, {
-            productId: product.id,
-            variantId: variant.id,
-            quantity: nextQuantity,
-          });
-          setAdded(true);
-        }}
-      >
-        {variant.stock === 0
-          ? "Sin stock"
-          : nextQuantity > variant.stock
-            ? "Máximo disponible en tu bolsa"
-            : "Agregar a mi bolsa"}
-      </button>
-      <p role="status">
-        {added && (
-          <>
-            Agregado a tu bolsa.{" "}
-            <Link className="text-link" href={`/bolsa?modalidad=${channel}`}>
-              Ver pedido →
+    <div className="product-detail">
+      <ProductGallery key={s.variantId} product={p} variantId={s.variantId} />
+      <div className="purchase-panel">
+        <p className="eyebrow">
+          {p.demo ? "Colección demostrativa" : "BEYBE · Vistiendo al futuro"}
+        </p>
+        <h1>{p.name}</h1>
+        <p className="product-code">Código {p.sku}</p>
+        <p className="lead">{p.description}</p>
+        <nav className="segmented" aria-label="Modalidad de este producto">
+          {(["minorista", "mayorista"] as const).map((c) => (
+            <Link
+              key={c}
+              href={"/producto/" + p.slug + "?modalidad=" + c}
+              aria-current={c === channel ? "page" : undefined}
+            >
+              {c === "minorista" ? "Para mi bebé" : "Para mi negocio"}
             </Link>
-          </>
+          ))}
+        </nav>
+        {!offers(p, channel).length ? (
+          <div className="notice">
+            <h2>No disponible en esta modalidad</h2>
+            <p>Consultá las presentaciones del otro canal.</p>
+            <Link
+              className="button"
+              href={
+                "/producto/" +
+                p.slug +
+                "?modalidad=" +
+                (channel === "minorista" ? "mayorista" : "minorista")
+              }
+            >
+              Ver otras presentaciones
+            </Link>
+          </div>
+        ) : (
+          variant &&
+          sale && (
+            <>
+              <div className="purchase-price">
+                {formatMoney(sale.price)}
+                <span> / {sale.label.toLowerCase()}</span>
+              </div>
+              <p className="fine-print">
+                {p.demo ? "Precio ficticio de prueba. " : ""}
+                {sale.units} {sale.units === 1 ? "unidad" : "unidades"} por
+                presentación.
+              </p>
+              <PurchaseOptions
+                variants={s.variants}
+                variant={variant}
+                sale={sale}
+                quantity={s.quantity}
+                max={s.max}
+                channel={channel}
+                onVariant={s.chooseVariant}
+                onPresentation={s.choosePresentation}
+                onQuantity={s.changeQuantity}
+              />
+              <p className={"availability " + (s.max === 0 ? "sold-out" : "")}>
+                {s.max === 0
+                  ? "Sin disponibilidad"
+                  : variant.availability === "on_request"
+                    ? "Disponibilidad a confirmar"
+                    : "Disponible" + (p.demo ? " en el ejemplo" : "")}{" "}
+                · SKU {variant.sku}
+              </p>
+              {s.check.errors.length > 0 && s.max > 0 && (
+                <p role="status" className="validation-message">
+                  {s.check.errors[0]}
+                </p>
+              )}
+              {!s.cartHasRoom && (
+                <p role="status">
+                  Tu bolsa alcanzó el máximo de 250 combinaciones. Eliminá una
+                  para continuar.
+                </p>
+              )}
+              <button
+                className="button add-button"
+                disabled={!s.valid || s.max === 0}
+                onClick={s.addToCart}
+              >
+                {s.added ? <Check size={19} /> : <ShoppingBag size={19} />}{" "}
+                {s.max === 0
+                  ? "Agotado"
+                  : s.added
+                    ? "Agregar otra vez"
+                    : "Agregar a mi bolsa"}
+              </button>
+              {s.added && (
+                <Link
+                  className="added-link"
+                  href={"/bolsa?modalidad=" + channel}
+                >
+                  Ver mi bolsa {channel} <ArrowRight size={17} />
+                </Link>
+              )}
+              <div className="purchase-notes">
+                <p>Precios en ARS. Envío y disponibilidad final a confirmar.</p>
+                <p>
+                  {channel === "mayorista"
+                    ? "Tu selección se consulta por WhatsApp. El negocio confirma el pedido."
+                    : "Compra mínima $50.000. Los cobros todavía no están habilitados."}
+                </p>
+              </div>
+            </>
+          )
         )}
-      </p>
+      </div>
     </div>
   );
 }
