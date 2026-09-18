@@ -16,17 +16,18 @@ export function CategoryGrid({ channel = "minorista" }: { channel?: Channel }) {
               src={category.image}
               alt={category.alt}
               fill
-              sizes="(max-width: 600px) 40vw, (max-width: 1000px) 46vw, 30vw"
+              sizes={
+                index === 0 || index === categories.length - 1
+                  ? "(max-width: 767px) 90vw, 30vw"
+                  : "(max-width: 767px) 44vw, 30vw"
+              }
             />
             <span className="reference-label">Imagen de referencia</span>
           </div>
           <div className="category-copy">
-            <div className="category-index">
-              <span>0{index + 1}</span>
-              <span className="category-arrow" aria-hidden="true">
-                ↗
-              </span>
-            </div>
+            <span className="category-arrow" aria-hidden="true">
+              ↗
+            </span>
             <h3>{category.name}</h3>
             <p>{category.description}</p>
           </div>

@@ -1,4 +1,5 @@
 "use client";
+import { Minus, Plus } from "lucide-react";
 import {
   formatMoney,
   type Product,
@@ -65,15 +66,33 @@ export function PurchaseOptions({
           <label className="field-label" htmlFor="quantity">
             Cantidad de presentaciones
           </label>
-          <input
-            id="quantity"
-            type="number"
-            value={quantity}
-            min={sale.minQuantity}
-            max={max}
-            step={sale.step}
-            onChange={(e) => onQuantity(Number(e.target.value))}
-          />
+          <div className="quantity-control">
+            <button
+              type="button"
+              aria-label="Reducir cantidad"
+              disabled={quantity <= sale.minQuantity}
+              onClick={() => onQuantity(quantity - sale.step)}
+            >
+              <Minus size={16} />
+            </button>
+            <input
+              id="quantity"
+              type="number"
+              value={quantity}
+              min={sale.minQuantity}
+              max={max}
+              step={sale.step}
+              onChange={(e) => onQuantity(Number(e.target.value))}
+            />
+            <button
+              type="button"
+              aria-label="Aumentar cantidad"
+              disabled={quantity + sale.step > max}
+              onClick={() => onQuantity(quantity + sale.step)}
+            >
+              <Plus size={16} />
+            </button>
+          </div>
         </div>
         <p>
           {quantity * sale.units}{" "}

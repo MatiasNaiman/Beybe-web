@@ -7,7 +7,6 @@ export function WholesaleBanner({
   return (
     <section className="wholesale-banner" aria-labelledby="wholesale-title">
       <div>
-        <p className="eyebrow">Crecer juntos</p>
         <h2 id="wholesale-title">
           BEYBE también
           <br />

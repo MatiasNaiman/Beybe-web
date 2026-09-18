@@ -1,12 +1,19 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "@fontsource-variable/dm-sans/wght.css";
 import "@fontsource-variable/lora/wght.css";
 import "./globals.css";
+import "./home.css";
 import "./shop.css";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { ShopProvider } from "@/components/shop-provider";
 import { catalog } from "@/lib/catalog";
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#fff9f1",
+};
 export const metadata: Metadata = {
   title: {
     default: "BEYBE · Vistiendo al futuro",
@@ -24,7 +31,7 @@ export default async function RootLayout({
 }) {
   const isDemo = (await catalog.list()).some((p) => p.demo);
   return (
-    <html lang="es-AR">
+    <html lang="es-AR" data-scroll-behavior="smooth">
       <body>
         <ShopProvider>
           <a className="skip-link" href="#contenido">

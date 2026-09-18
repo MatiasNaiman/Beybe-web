@@ -15,12 +15,14 @@ export function ProductVisual({
   label = "Fotografía pendiente",
   tone = 0,
   priority = false,
+  sizes = "(max-width:389px) 90vw, (max-width:1023px) 45vw, 30vw",
 }: {
   image?: Product["images"][number] | null;
   category: Product["category"];
   label?: string;
   tone?: number;
   priority?: boolean;
+  sizes?: string;
 }) {
   const Icon = icons[category];
   return image ? (
@@ -29,7 +31,7 @@ export function ProductVisual({
         src={image.src}
         alt={image.alt}
         fill
-        sizes="(max-width:600px) 90vw, (max-width:1000px) 45vw, 33vw"
+        sizes={sizes}
         priority={priority}
       />
     </div>

@@ -3,6 +3,7 @@ import { categories } from "@/data/categories";
 import { catalog } from "@/lib/catalog";
 import { channelFrom, formatMoney, minimums } from "@/lib/commerce";
 import { ProductCard } from "@/components/product-card";
+import { CatalogControls } from "@/components/catalog-controls";
 import { Reveal } from "@/components/reveal";
 export const metadata = { title: "Catálogo" };
 type Params = Promise<Record<string, string | string[] | undefined>>;
@@ -41,7 +42,6 @@ export default async function CatalogPage({
       </div>
       <div className="catalog-heading">
         <div>
-          <p className="eyebrow">Para cada pequeño momento</p>
           <h1>{category?.name ?? "Pequeños favoritos."}</h1>
           <p className="lead">Elegí cada detalle, a tu manera.</p>
         </div>
@@ -67,68 +67,14 @@ export default async function CatalogPage({
           Ver mi bolsa →
         </Link>
       </div>
-      <nav className="category-filters" aria-label="Categorías">
-        <Link
-          href={link(channel, "")}
-          aria-current={!category ? "page" : undefined}
-        >
-          Todo
-        </Link>
-        {categories.map((c) => (
-          <Link
-            key={c.id}
-            href={link(channel, c.id)}
-            aria-current={c.id === category?.id ? "page" : undefined}
-          >
-            {c.name}
-          </Link>
-        ))}
-      </nav>
-      <form
+      <CatalogControls
         key={JSON.stringify(params)}
-        action="/catalogo"
-        className="catalog-search"
-        role="search"
-      >
-        <input type="hidden" name="modalidad" value={channel} />
-        {category && (
-          <input type="hidden" name="categoria" value={category.id} />
-        )}
-        <div className="search-input-wrap">
-          <label htmlFor="catalog-search" className="sr-only">
-            Buscar artículos
-          </label>
-          <input
-            id="catalog-search"
-            name="q"
-            type="search"
-            placeholder="Nombre, código o detalle…"
-            defaultValue={query}
-            maxLength={100}
-          />
-        </div>
-        <div>
-          <label htmlFor="catalog-sort" className="sr-only">
-            Ordenar artículos
-          </label>
-          <select id="catalog-sort" name="orden" defaultValue={sort}>
-            <option value="featured">Orden sugerido</option>
-            <option value="price-asc">Menor precio por presentación</option>
-            <option value="price-desc">Mayor precio por presentación</option>
-            <option value="name">Nombre A–Z</option>
-          </select>
-        </div>
-        <label className="checkbox-label">
-          <input
-            type="checkbox"
-            name="disponible"
-            value="si"
-            defaultChecked={available}
-          />
-          Con disponibilidad
-        </label>
-        <button className="button compact">Aplicar</button>
-      </form>
+        channel={channel}
+        categoryId={category?.id}
+        query={query}
+        sort={sort}
+        available={available}
+      />
       <div className="results-caption">
         <span>
           {products.length} {products.length === 1 ? "artículo" : "artículos"}

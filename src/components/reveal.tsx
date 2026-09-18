@@ -15,8 +15,8 @@ export function Reveal({ children }: { children: ReactNode }) {
         );
         targets?.forEach((target, index) => {
           gsap.from(target, {
-            y: 22,
-            opacity: 0,
+            y: 12,
+            opacity: 0.75,
             duration: 0.7,
             delay: (index % 3) * 0.055,
             ease: "power2.out",

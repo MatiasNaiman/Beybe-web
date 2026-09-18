@@ -36,11 +36,9 @@ export function Cart({ channel }: { channel: Channel }) {
           </button>
         </div>
       )}
-      {loading && (
-        <p role="status" className="notice">
-          Actualizando tu bolsa…
-        </p>
-      )}
+      <p role="status" className="cart-status">
+        {loading ? "Actualizando tu bolsa…" : ""}
+      </p>
       {ready && lines.length === 0 ? (
         <div className="empty-bag">
           <ShoppingBag size={44} strokeWidth={1} />

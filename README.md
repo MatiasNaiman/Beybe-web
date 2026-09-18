@@ -36,11 +36,10 @@ Si el lanzador de pnpm del entorno fuerza reinstalaciones, los equivalentes dire
 
 ## Catálogo real e imágenes
 
-`src/data/products.json` está vacío intencionalmente: faltan los SKU, precios, variantes y stock autorizados.
+`src/data/products.json` contiene 8 artículos demostrativos, identificados con `demo: true`: sus nombres, SKU, precios y existencias son ficticios y reemplazables.
 Las imágenes de categorías no son fichas de productos ni se presentan como artículos BEYBE.
 Ver [carga del catálogo](docs/catalogo.md) y [licencias](docs/imagenes.md).
-La estructura admite más de 120 artículos; no hay límite de 50 ni artículos ficticios publicados.
-Los datos de prueba existen únicamente en `tests/`.
+La estructura admite más de 120 artículos. El importador valida el catálogo real sin modificar tarjetas ni carritos; ver [estado de la fase demo](docs/estado-fase-demo.md). No hay cobros habilitados ni despliegue autorizado.
 
 ## Arquitectura
 
@@ -68,4 +67,4 @@ El contrato de pagos está preparado en `src/lib/payments.ts`; **ningún medio d
 No se ha publicado la tienda ni contratado servicios. No hay datos personales, secretos ni tokens en este repositorio.
 # Estado actual
 
-La fase de catálogo demostrativo y carritos está implementada. Ver [estado y pasos para retomar](docs/estado-fase-demo.md), incluyendo pruebas y pendientes. Las notas anteriores sobre catálogo vacío describen la primera entrega.
+La fase de catálogo demostrativo y carritos está implementada. El rediseño móvil se realizó sobre esta misma aplicación: [cambios, comprobaciones y límites](docs/rediseno-mobile.md).

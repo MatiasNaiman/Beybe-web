@@ -36,10 +36,8 @@ No hay base de datos ni panel administrativo visual. El importador funciona loca
 - Figma revisado en navegador; get_design_context bloqueado por cuota Starter. Se usó el diseño existente y sus archivos locales.
 - Recuperación en GitHub: recovery/before-demo-store-2026-09-18.
 
-## Pendiente antes de dar esta fase por cerrada
-- Completar revisión responsive final en 320, 768, 1024 y 1440 px, consola limpia sobre compilación final y accesibilidad básica.
-- Actualizar documentación anterior que todavía describe el catálogo vacío.
-- Revisar presentación final y cualquier ajuste que surja. No se desplegó en producción.
+## Continuación: rediseño móvil
+La revisión responsive y la actualización del README se realizaron durante la etapa móvil. Ver [rediseño, comprobaciones y límites](rediseno-mobile.md). El build final está aprobado; el código continúa en la copia local, sin push ni despliegue de esta etapa.
 
 ## Próximas fases, fuera de esta entrega
 Panel administrativo autenticado/base de datos, catálogo y fotos oficiales, órdenes persistentes y reserva transaccional de stock, checkout seguro y webhooks verificados, envío, políticas comerciales y despliegue autorizado.

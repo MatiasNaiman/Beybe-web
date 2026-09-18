@@ -14,18 +14,19 @@ export default async function Home() {
   return (
     <>
       <HeroMotion>
-        <section className="hero container" aria-labelledby="hero-title">
+        <section
+          className="hero container"
+          aria-labelledby="hero-title"
+          data-story-section="welcome"
+        >
           <div className="hero-copy">
-            <p className="eyebrow">BEYBE · Ropa y accesorios para bebés</p>
             <h1 id="hero-title">
               Vistiendo
               <br />
               al futuro.
             </h1>
             <p className="hero-description">
-              Acompañamos cada nueva historia con prendas
-              <br className="desktop-break" /> y detalles hechos por nosotros,
-              desde 1998.
+              Ropa y textiles para bebés, de fabricación propia desde 1998.
             </p>
             <div className="hero-actions">
               <div>
@@ -41,17 +42,14 @@ export default async function Home() {
                 <small className="mobile-minimum">Pedido mínimo $150.000</small>
               </div>
             </div>
-            <p className="minimum-note">
-              Minorista desde $50.000 · Mayorista desde $150.000
-            </p>
           </div>
-          <div className="hero-visual">
+          <div className="hero-visual" data-story-layer="textile">
             <Image
               className="textile"
               src="/brand/textil.webp"
               alt=""
               fill
-              sizes="(max-width: 760px) 90vw, 480px"
+              sizes="(max-width: 767px) 112px, 480px"
               priority
             />
             <div className="hero-brand">
@@ -74,7 +72,6 @@ export default async function Home() {
       >
         <div className="section-heading">
           <div>
-            <p className="eyebrow">Un mundo de pequeños detalles</p>
             <h2 id="categories-title">Encontrá lo que necesitás.</h2>
           </div>
           <Link className="text-link" href="/catalogo">
@@ -93,7 +90,6 @@ export default async function Home() {
         <section className="container featured-section">
           <div className="section-heading">
             <div>
-              <p className="eyebrow">Cada detalle cuenta</p>
               <h2>Un pequeño vistazo.</h2>
             </div>
             <Link className="text-link" href="/catalogo">
@@ -117,15 +113,20 @@ export default async function Home() {
       <div className="container">
         <WholesaleBanner />
       </div>
-      <section className="story-teaser container">
-        <h2>Desde 1998, parte de sus primeros días.</h2>
-        <p>
-          Somos fabricantes. Elegimos acompañar a las familias con nuestra
-          propia manera de hacer.
-        </p>
-        <Link className="text-link" href="/nosotros">
-          Conocé nuestra historia <span aria-hidden="true">→</span>
-        </Link>
+      <section className="story-teaser container" data-story-section="heritage">
+        <div className="story-mark">
+          1998<span>El comienzo de nuestra historia</span>
+        </div>
+        <div>
+          <h2>Desde 1998, parte de sus primeros días.</h2>
+          <p>
+            Somos fabricantes. Elegimos acompañar a las familias con nuestra
+            propia manera de hacer.
+          </p>
+          <Link className="text-link" href="/nosotros">
+            Conocé nuestra historia <span aria-hidden="true">→</span>
+          </Link>
+        </div>
       </section>
     </>
   );

@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { ShoppingBag, Check, ArrowRight } from "lucide-react";
+import { ShoppingBag, Check, ArrowRight, ChevronDown } from "lucide-react";
 import {
   formatMoney,
   offers,
@@ -27,8 +27,13 @@ export function ProductPurchase({
           {p.demo ? "Colección demostrativa" : "BEYBE · Vistiendo al futuro"}
         </p>
         <h1>{p.name}</h1>
+        {sale && (
+          <div className="purchase-price">
+            {formatMoney(sale.price)}
+            <span> / {sale.label.toLowerCase()}</span>
+          </div>
+        )}
         <p className="product-code">Código {p.sku}</p>
-        <p className="lead">{p.description}</p>
         <nav className="segmented" aria-label="Modalidad de este producto">
           {(["minorista", "mayorista"] as const).map((c) => (
             <Link
@@ -60,10 +65,6 @@ export function ProductPurchase({
           variant &&
           sale && (
             <>
-              <div className="purchase-price">
-                {formatMoney(sale.price)}
-                <span> / {sale.label.toLowerCase()}</span>
-              </div>
               <p className="fine-print">
                 {p.demo ? "Precio ficticio de prueba. " : ""}
                 {sale.units} {sale.units === 1 ? "unidad" : "unidades"} por
@@ -130,6 +131,12 @@ export function ProductPurchase({
             </>
           )
         )}
+        <details className="purchase-details">
+          <summary>
+            Sobre este artículo <ChevronDown size={18} />
+          </summary>
+          <p>{p.description}</p>
+        </details>
       </div>
     </div>
   );
