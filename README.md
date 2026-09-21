@@ -1,5 +1,7 @@
 # BEYBE · Web propia
 
+La portada incorpora las fotografías BEYBE y un isotipo animado con scroll. Ver [informe del hero inmersivo](docs/hero-inmersivo.md) para recursos, recuperación y verificaciones.
+
 Implementación del diseño aprobado en Figma, con el logo corregido y el fondo B (textil sutil).
 Referencia visual: https://www.figma.com/design/2N66QVxjrut0ChOeog2Xvo?node-id=11-373
 Portada móvil: nodo 11:466. Tipografías Lora y DM Sans, servidas localmente.

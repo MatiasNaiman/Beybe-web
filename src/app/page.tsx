@@ -1,9 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
-import { Brand } from "@/components/brand";
+import { CampaignHero } from "@/components/campaign-hero";
 import { CategoryGrid } from "@/components/category-grid";
 import { WholesaleBanner } from "@/components/wholesale-banner";
-import { HeroMotion } from "@/components/hero-motion";
 import { Reveal } from "@/components/reveal";
 import { ProductCard } from "@/components/product-card";
 import { catalog } from "@/lib/catalog";
@@ -13,59 +11,7 @@ export default async function Home() {
   ).slice(0, 3);
   return (
     <>
-      <HeroMotion>
-        <section
-          className="hero container"
-          aria-labelledby="hero-title"
-          data-story-section="welcome"
-        >
-          <div className="hero-copy">
-            <h1 id="hero-title">
-              Vistiendo
-              <br />
-              al futuro.
-            </h1>
-            <p className="hero-description">
-              Ropa y textiles para bebés, de fabricación propia desde 1998.
-            </p>
-            <div className="hero-actions">
-              <div>
-                <Link href="/catalogo" className="button">
-                  Comprar para mi bebé
-                </Link>
-                <small className="mobile-minimum">Compra mínima $50.000</small>
-              </div>
-              <div>
-                <Link href="/mayoristas" className="button secondary">
-                  Comprar mayorista
-                </Link>
-                <small className="mobile-minimum">Pedido mínimo $150.000</small>
-              </div>
-            </div>
-          </div>
-          <div className="hero-visual" data-story-layer="textile">
-            <Image
-              className="textile"
-              src="/brand/textil.webp"
-              alt=""
-              fill
-              sizes="(max-width: 767px) 112px, 480px"
-              priority
-            />
-            <div className="hero-brand">
-              <Brand hero />
-              <p>Vistiendo al futuro. Desde 1998.</p>
-            </div>
-          </div>
-        </section>
-      </HeroMotion>
-      <div className="benefits">
-        <div className="container">
-          <span>Diseñamos y fabricamos</span>
-          <span>Para cada pequeño momento</span>
-          <span>Venta minorista y mayorista</span>
-        </div>
-      </div>
+      <CampaignHero />
       <section
         className="container categories-section"
         aria-labelledby="categories-title"

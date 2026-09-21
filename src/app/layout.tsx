@@ -3,6 +3,7 @@ import "@fontsource-variable/dm-sans/wght.css";
 import "@fontsource-variable/lora/wght.css";
 import "./globals.css";
 import "./home.css";
+import "./campaign.css";
 import "./shop.css";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";

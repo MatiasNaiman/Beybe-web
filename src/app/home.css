@@ -1,91 +1,3 @@
-/* Editorial sections: mobile composition first; stable section/layer hooks for future storytelling. */
-.hero {
-  position: relative;
-  display: grid;
-  isolation: isolate;
-  padding-block: 28px 32px;
-}
-.hero-copy {
-  position: relative;
-  z-index: 1;
-}
-.hero h1 {
-  font-size: clamp(40px, 12vw, 54px);
-  line-height: 1.03;
-  letter-spacing: -0.035em;
-  max-width: 72%;
-  margin: 0 0 20px;
-}
-.hero-description {
-  font-size: 16px;
-  line-height: 1.55;
-  max-width: 34ch;
-  color: var(--muted);
-  margin-bottom: 24px;
-}
-.hero-actions {
-  display: grid;
-  gap: 12px;
-}
-.hero-actions > div {
-  display: grid;
-  gap: 4px;
-}
-.hero-actions .button {
-  justify-content: space-between;
-  padding-inline: 20px;
-  width: 100%;
-}
-.hero-actions small {
-  font-size: 12px;
-  color: var(--muted);
-  padding-inline: 20px;
-}
-.hero-visual {
-  position: absolute;
-  right: 0;
-  top: 28px;
-  width: clamp(78px, 24vw, 112px);
-  aspect-ratio: 1;
-  border-radius: 38% 42% 36% 44%;
-  overflow: hidden;
-  isolation: isolate;
-}
-.textile {
-  object-fit: cover;
-  z-index: -1;
-}
-.hero-brand {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 12px;
-}
-.hero-brand .brand {
-  width: 100%;
-}
-.hero-brand p {
-  display: none;
-}
-.benefits {
-  border-block: 1px solid var(--line);
-}
-.benefits .container {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  padding-block: 16px;
-  font-size: 13px;
-}
-.benefits span:first-child {
-  font-family: var(--serif);
-  font-size: 16px;
-}
-.benefits span:nth-child(2) {
-  display: none;
-}
 .categories-section,
 .featured-section {
   padding-block: var(--section-space);
@@ -290,62 +202,6 @@
   }
 }
 @media (min-width: 768px) {
-  .hero {
-    grid-template-columns: 1.25fr 1fr;
-    align-items: center;
-    gap: 40px;
-    min-height: 540px;
-    padding-block: 48px 64px;
-  }
-  .hero h1 {
-    font-size: clamp(60px, 6.4vw, 90px);
-    max-width: 650px;
-    margin-bottom: 24px;
-  }
-  .hero-description {
-    font-size: 18px;
-    max-width: 42ch;
-  }
-  .hero-visual {
-    position: relative;
-    inset: auto;
-    width: 100%;
-    max-width: 480px;
-    aspect-ratio: 480/456;
-  }
-  .hero-brand {
-    padding: 32px;
-  }
-  .hero-brand .brand {
-    width: min(100%, 368px);
-  }
-  .hero-brand p {
-    display: block;
-    position: absolute;
-    bottom: 13%;
-    font: italic 14px var(--serif);
-    margin: 0;
-  }
-  .hero-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-  }
-  .hero-actions .button {
-    justify-content: center;
-  }
-  .hero-actions small {
-    text-align: center;
-    padding-inline: 4px;
-  }
-  .benefits .container {
-    padding-block: 24px;
-    justify-content: space-around;
-    font-size: 16px;
-  }
-  .benefits span:nth-child(2) {
-    display: block;
-  }
   .section-heading {
     display: flex;
     justify-content: space-between;
@@ -412,12 +268,5 @@
   }
   .category-copy {
     padding-right: 18px;
-  }
-  .benefits .container {
-    flex-direction: column;
-    gap: 4px;
-  }
-  .hero h1 {
-    max-width: 74%;
   }
 }
