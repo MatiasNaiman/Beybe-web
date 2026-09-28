@@ -1,192 +1,252 @@
-/* Campaign owns the hero and its immediate handoff. Shopping styles stay separate. */
+/* The campaign alone owns its composition, responsive art direction and flight. */
 .campaign-story {
   position: relative;
   isolation: isolate;
 }
 .campaign-hero {
-  display: grid;
-  gap: 24px;
-  padding: 16px 16px 0 0;
-}
-.campaign-copy {
-  min-width: 0;
-}
-.campaign-copy h1 {
-  font-size: clamp(38px, 10.5vw, 52px);
-  line-height: 1.04;
-  letter-spacing: -0.035em;
-  margin: 0 0 16px;
-}
-.campaign-copy h1 em {
-  font-weight: 400;
-}
-.campaign-description {
-  font-size: 15px;
-  line-height: 1.5;
-  max-width: 34ch;
-  color: var(--muted);
-  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+  isolation: isolate;
+  overflow: visible;
+  color: #29483d;
+  background: var(--cream);
 }
 .campaign-image {
-  grid-row: 1;
   position: relative;
+  height: clamp(310px, 47svh, 390px);
   overflow: hidden;
-  aspect-ratio: 4/5;
-  background: var(--peach-light);
-  border-radius: 4px 4px 36px 4px;
 }
 .campaign-image picture {
   display: block;
-  width: 100%;
   height: 100%;
+  width: 100%;
 }
 .campaign-photo {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 50% 58%;
-  transform-origin: 50% 62%;
+  object-position: 50% 40%;
+}
+.campaign-copy {
+  position: relative;
+  z-index: 2;
+  padding: 22px 20px 24px;
+}
+.campaign-copy h1 {
+  font-size: clamp(36px, 10vw, 46px);
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  margin: 0 0 14px;
+}
+.campaign-copy h1 em {
+  font-weight: 400;
+}
+.campaign-description {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+}
+.campaign-description > span {
+  font: 500 16px/1.3 var(--serif);
+}
+.campaign-description > small {
+  font-size: 10px;
+  line-height: 1.4;
+  font-weight: 650;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #60746b;
 }
 .campaign-actions {
   display: grid;
-  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 20px;
 }
 .campaign-actions > div {
-  display: grid;
-  gap: 4px;
+  min-width: 0;
 }
-.campaign-actions .button {
-  width: 100%;
-  min-height: 48px;
-  justify-content: space-between;
-  padding: 12px 18px;
+.campaign-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 8px 10px;
+  border: 1px solid #29483d;
+  border-radius: 999px;
+  color: var(--cream);
+  background: #29483d;
+  font-size: 12px;
+  line-height: 1.2;
+  font-weight: 550;
+  text-align: center;
+  text-decoration: none;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    transform 0.2s;
+}
+.campaign-button-secondary {
+  color: #29483d;
+  background: transparent;
+}
+.campaign-button:hover {
+  background: #406454;
+  color: #fff9f1;
+  transform: translateY(-1px);
+}
+.campaign-button:focus-visible {
+  outline: 2px solid #29483d;
+  outline-offset: 4px;
 }
 .campaign-actions small {
-  font-size: 12px;
-  color: var(--muted);
-  padding-left: 18px;
+  display: block;
+  margin-top: 7px;
+  text-align: center;
+  font-size: 10px;
+  line-height: 1.4;
+  color: #60746b;
 }
 .campaign-flight {
   position: absolute;
-  z-index: 2;
+  left: 0;
+  top: 0;
+  z-index: 3;
+  width: 19%;
+  max-width: 90px;
+  opacity: 0;
+  visibility: hidden;
   pointer-events: none;
-  width: 28px;
-  right: 4px;
-  top: 32%;
 }
 .campaign-butterfly {
   display: block;
   width: 100%;
   height: auto;
+  overflow: visible;
 }
 .campaign-bridge {
-  padding: 28px 16px 24px 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
+  padding-block: 28px;
+  background: url("/brand/textil.webp") center/cover;
+}
+.campaign-bridge.container {
+  width: 100%;
+  max-width: none;
+  margin-inline: 0;
+  padding-inline: var(--page-gutter);
 }
 .campaign-bridge p {
-  font: italic 20px/1.35 var(--serif);
   margin: 0;
+  font: italic 20px/1.35 var(--serif);
 }
 .campaign-bridge .text-link {
   font-size: 13px;
   width: fit-content;
 }
 .campaign-story + .categories-section {
-  padding-top: 24px;
-  position: relative;
-}
-.campaign-story + .categories-section::before {
-  content: "";
-  position: absolute;
-  inset: 0 0 auto;
-  height: 1px;
-  background: var(--line);
-}
-@media (min-width: 600px) and (max-width: 767px) {
-  .campaign-hero {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: 24px;
-    align-items: center;
-  }
-  .campaign-image {
-    grid-row: 1;
-    grid-column: 2;
-    aspect-ratio: 941/1672;
-  }
-  .campaign-copy {
-    grid-column: 1;
-    grid-row: 1;
-  }
-  .campaign-copy h1 {
-    font-size: 42px;
-  }
+  padding-top: 28px;
 }
 @media (min-width: 768px) {
   .campaign-hero {
-    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.55fr);
-    align-items: center;
-    gap: 32px;
-    padding-block: 40px 24px;
-    padding-right: 16px;
-  }
-  .campaign-copy {
-    grid-column: 1;
-    grid-row: 1;
-    padding-block: 16px;
-  }
-  .campaign-copy h1 {
-    font-size: clamp(42px, 5.2vw, 76px);
-    margin-bottom: 24px;
-  }
-  .campaign-description {
-    font-size: 16px;
-    margin-bottom: 24px;
+    height: clamp(520px, 64svh, 720px);
   }
   .campaign-image {
-    grid-column: 2;
-    grid-row: 1;
-    aspect-ratio: 1672/941;
-    border-radius: 4px 4px 64px 4px;
+    position: absolute;
+    inset: 0;
+    height: 100%;
+    z-index: -2;
+  }
+  .campaign-image::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      transparent 43%,
+      rgba(255, 249, 241, 0.04) 52%,
+      rgba(255, 249, 241, 0.52) 69%,
+      rgba(255, 249, 241, 0.92)
+    );
   }
   .campaign-photo {
-    object-position: center;
-    transform-origin: center;
+    object-position: 50% 50%;
+  }
+  .campaign-copy {
+    position: absolute;
+    left: 65%;
+    top: 48%;
+    transform: translateY(-50%);
+    width: 29%;
+    max-width: 420px;
+    padding: 0;
+  }
+  .campaign-copy h1 {
+    font-size: clamp(44px, 5.2vw, 82px);
+    margin-bottom: 24px;
+  }
+  .campaign-description > span {
+    font-size: clamp(16px, 1.35vw, 20px);
+  }
+  .campaign-description > small {
+    font-size: 10px;
   }
   .campaign-actions {
-    max-width: 290px;
+    gap: 24px;
+    margin-top: 28px;
+  }
+  .campaign-button {
+    font-size: 12px;
+    padding: 8px 12px;
   }
   .campaign-flight {
-    width: 40px;
-    right: max(4px, calc(var(--page-gutter) / 2 - 20px));
-    top: 30%;
+    width: 7%;
+    max-width: 115px;
   }
   .campaign-bridge {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    gap: 24px;
-    padding-block: 24px 32px;
-    background: url("/brand/textil.webp") center/cover;
+    padding-block: 32px;
   }
   .campaign-bridge p {
     font-size: 24px;
   }
-  .campaign-bridge .text-link {
-    font-size: 14px;
+}
+@media (min-width: 768px) and (max-width: 1050px) {
+  .campaign-hero {
+    height: clamp(420px, 52vw, 540px);
   }
-  .campaign-story + .categories-section {
-    padding-top: 40px;
+  .campaign-copy {
+    left: 61%;
+    width: 35%;
+  }
+  .campaign-actions {
+    gap: 12px;
   }
 }
-@media (min-width: 1200px) {
-  .campaign-hero {
-    gap: 48px;
-    padding-block: 48px 32px;
+@media (prefers-reduced-motion: reduce) {
+  .campaign-flight {
+    display: none;
   }
-  .campaign-description {
-    font-size: 17px;
+  .campaign-button {
+    transition: none;
+  }
+}
+
+.campaign-actions:focus-within > div {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+.campaign-keyboard .campaign-actions > div {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+}
+@media (min-width: 500px) and (max-width: 767px) {
+  .campaign-photo {
+    object-position: 50% 20%;
   }
 }
