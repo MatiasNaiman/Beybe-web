@@ -39,39 +39,39 @@ export function HeroMotion({ children }: { children: ReactNode }) {
           const points = desktop
             ? canPin
               ? [
-                  [0.88, -0.08],
-                  [0.91, 0.08],
-                  [0.86, 0.18],
-                  [0.93, 0.3],
-                  [0.88, 0.44],
-                  [0.92, 0.58],
-                  [0.9, 1.12],
+                  [0.59, -0.08],
+                  [0.61, 0.08],
+                  [0.57, 0.21],
+                  [0.6, 0.34],
+                  [0.56, 0.48],
+                  [0.59, 0.64],
+                  [0.6, 1.1],
                 ]
               : [
-                  [0.88, 0.22],
-                  [0.91, 0.36],
-                  [0.86, 0.5],
-                  [0.93, 0.65],
-                  [0.9, 1.14],
+                  [0.59, 0.16],
+                  [0.61, 0.3],
+                  [0.57, 0.45],
+                  [0.6, 0.62],
+                  [0.6, 1.1],
                 ]
             : canPin
               ? [
-                  [0.88, 0.18],
-                  [0.92, 0.32],
-                  [0.87, 0.48],
-                  [0.94, 0.68],
-                  [0.91, 0.76],
-                  [0.89, 0.94],
-                  [0.92, 1.08],
+                  [0.88, 0.08],
+                  [0.92, 0.2],
+                  [0.86, 0.34],
+                  [0.93, 0.48],
+                  [0.88, 0.61],
+                  [0.94, 0.72],
+                  [0.96, 0.78],
                 ]
               : [
-                  [0.88, 0.1],
-                  [0.92, 0.22],
-                  [0.87, 0.5],
-                  [0.94, 0.89],
-                  [0.91, 0.76],
-                  [0.89, 0.94],
-                  [0.92, 1.08],
+                  [0.88, 0.06],
+                  [0.92, 0.18],
+                  [0.86, 0.32],
+                  [0.93, 0.46],
+                  [0.88, 0.59],
+                  [0.94, 0.7],
+                  [0.96, 0.76],
                 ];
           const route = () =>
             points.map(([x, y]) => ({
@@ -113,9 +113,10 @@ export function HeroMotion({ children }: { children: ReactNode }) {
               { scaleX: 1, rotation: 0, duration: 0.34, ease: "sine.inOut" },
               0.365,
             );
-          const fadeStart = desktop ? 0.9 : 0.88;
-          const fadeEnd = 0.99;
-          const entry = desktop ? 0.08 : 0.1;
+          const fadeStart = desktop ? 0.82 : 0.7;
+          const fadeEnd = desktop ? 0.97 : 0.84;
+          const motionEnd = desktop ? 0.92 : 0.78;
+          const entry = desktop ? 0.06 : 0.08;
           const updateFlap = (progress: number) => {
             if (!document.hidden && progress > entry && progress < fadeEnd)
               flap.play();
@@ -127,7 +128,7 @@ export function HeroMotion({ children }: { children: ReactNode }) {
               trigger: hero,
               start: () => `top top+=${header() + (canPin ? 0 : 60)}`,
               end: () =>
-                `+=${canPin ? window.innerHeight * (desktop ? 1.3 : 0.82) : Math.min(desktop ? 520 : 440, window.innerHeight * (desktop ? 0.82 : 0.7))}`,
+                `+=${canPin ? window.innerHeight * (desktop ? 1.12 : 1.05) : Math.min(desktop ? 480 : 560, window.innerHeight * (desktop ? 0.76 : 0.95))}`,
               pin: canPin,
               scrub: 0.25,
               invalidateOnRefresh: true,
@@ -153,7 +154,7 @@ export function HeroMotion({ children }: { children: ReactNode }) {
                   fromCurrent: false,
                   autoRotate: false,
                 },
-                duration: fadeEnd,
+                duration: motionEnd,
                 ease: "none",
               },
               0,
@@ -190,21 +191,17 @@ export function HeroMotion({ children }: { children: ReactNode }) {
             true,
             false,
           )[0] as gsap.core.Tween;
-          if (canPin) {
-            story
-              .fromTo(
-                actions[0],
-                { autoAlpha: 0, y: 12 },
-                { autoAlpha: 1, y: 0, duration: 0.22, ease: "power1.out" },
-                0.18,
-              )
-              .fromTo(
-                actions[1],
-                { autoAlpha: 0, y: 12 },
-                { autoAlpha: 1, y: 0, duration: 0.22, ease: "power1.out" },
-                desktop ? 0.34 : 0.32,
-              );
-          }
+          story.fromTo(
+            actions,
+            { y: 4 },
+            {
+              y: 0,
+              duration: 0.12,
+              stagger: 0.03,
+              ease: "power1.out",
+            },
+            0.04,
+          );
           // Keyboard users get the actions without a required scroll gesture.
           const keyboard = (event: KeyboardEvent) => {
             if (event.key === "Tab") root.classList.add("campaign-keyboard");
