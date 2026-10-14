@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { CampaignHero } from "@/components/campaign-hero";
 import { CategoryGrid } from "@/components/category-grid";
+import { CategoryStoryMotion } from "@/components/category-story-motion";
 import { WholesaleBanner } from "@/components/wholesale-banner";
 import { Reveal } from "@/components/reveal";
 import { ProductCard } from "@/components/product-card";
@@ -16,6 +17,7 @@ export default async function Home() {
         className="container categories-section"
         aria-labelledby="categories-title"
       >
+        <CategoryStoryMotion />
         <div className="section-heading">
           <div>
             <h2 id="categories-title">Encontrá lo que necesitás.</h2>
@@ -24,9 +26,7 @@ export default async function Home() {
             Explorar todo el catálogo <span aria-hidden="true">→</span>
           </Link>
         </div>
-        <Reveal>
-          <CategoryGrid />
-        </Reveal>
+        <CategoryGrid />
         <p className="image-note">
           Imágenes ilustrativas provisionales. No representan los artículos
           BEYBE. <Link href="/creditos">Ver fuentes</Link>

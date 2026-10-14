@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { categories } from "@/data/categories";
 import type { Channel } from "@/lib/commerce";
+import styles from "./category-story-motion.module.css";
 export function CategoryGrid({ channel = "minorista" }: { channel?: Channel }) {
   return (
     <div className="category-grid">
@@ -22,6 +23,14 @@ export function CategoryGrid({ channel = "minorista" }: { channel?: Channel }) {
                   : "(max-width: 767px) 44vw, 30vw"
               }
             />
+            <span
+              className={styles.fabricCurtain}
+              data-category-curtain
+              aria-hidden="true"
+            >
+              <span className={styles.fabricPanelLeft} data-curtain-panel />
+              <span className={styles.fabricPanelRight} data-curtain-panel />
+            </span>
             <span className="reference-label">Imagen de referencia</span>
           </div>
           <div className="category-copy">

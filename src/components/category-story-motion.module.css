@@ -1,0 +1,95 @@
+.threadLayer {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.thread {
+  position: absolute;
+  display: block;
+  overflow: visible;
+  fill: none;
+  stroke: color-mix(in srgb, var(--ink) 58%, var(--mint));
+  stroke-width: 1.45;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+.thread [data-category-underline],
+.thread [data-category-trail] {
+  visibility: hidden;
+}
+
+.threadMeasure {
+  visibility: hidden;
+  stroke: none;
+}
+
+.butterflyMarker {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  width: 25px;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.butterflyMarker :global(.experimental-butterfly) {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.fabricCurtain {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  display: flex;
+  overflow: hidden;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.fabricPanelLeft,
+.fabricPanelRight {
+  position: relative;
+  flex: 0 0 50%;
+  height: 100%;
+  background-color: var(--sage);
+  background-image:
+    linear-gradient(rgba(234, 240, 232, 0.72), rgba(234, 240, 232, 0.72)),
+    url("/brand/textil.webp");
+  background-repeat: no-repeat;
+  background-size: 200% 100%;
+}
+
+.fabricPanelLeft {
+  border-right: 1px dashed color-mix(in srgb, var(--ink) 24%, transparent);
+  background-position: left center;
+}
+
+.fabricPanelRight {
+  background-position: right center;
+}
+
+:global(.categories-section) {
+  position: relative;
+  isolation: isolate;
+}
+
+:global(.categories-section) > .threadLayer ~ * {
+  position: relative;
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .butterflyMarker {
+    display: none;
+  }
+}

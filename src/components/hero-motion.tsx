@@ -70,13 +70,13 @@ export function HeroMotion({ children }: { children: ReactNode }) {
             const maxX = width - halfButterfly - edgeGap;
 
             const desktopShape: Array<[number, number]> = [
-              [0.82, 0.01],
-              [0.76, 0.14],
-              [0.8, 0.28],
-              [0.68, 0.44],
-              [0.72, 0.62],
-              [0.79, 0.8],
-              [0.86, 0.98],
+              [0.9, -0.04],
+              [0.855, 0.11],
+              [0.905, 0.27],
+              [0.86, 0.44],
+              [0.9, 0.62],
+              [0.885, 0.79],
+              [0.9, 0.97],
             ];
             const mobileShape: Array<[number, number]> = canPin
               ? [
@@ -113,6 +113,7 @@ export function HeroMotion({ children }: { children: ReactNode }) {
               };
             });
             const rotationLimit = desktop ? 10 : 9;
+            const desktopRotationWeights = [1, 1, 0.9, 0.72, 0.5, 0.28, 0.12];
             const rotations = points.map((point, index) => {
               const previous = points[Math.max(0, index - 1)];
               const next = points[Math.min(points.length - 1, index + 1)];
@@ -122,7 +123,10 @@ export function HeroMotion({ children }: { children: ReactNode }) {
               return gsap.utils.clamp(
                 -rotationLimit,
                 rotationLimit,
-                tangent * (desktop ? 0.3 : 0.34),
+                tangent *
+                  (desktop
+                    ? 0.65 * (desktopRotationWeights[index] ?? 0.12)
+                    : 0.34),
               );
             });
 
@@ -135,10 +139,10 @@ export function HeroMotion({ children }: { children: ReactNode }) {
             autoAlpha: 0,
           });
 
-          const fadeStart = desktop ? 0.84 : 0.97;
-          const fadeEnd = desktop ? 1 : 1;
-          const motionEnd = desktop ? 0.94 : 1;
-          const entry = desktop ? 0.045 : 0.08;
+          const fadeStart = desktop ? 0.9 : 0.97;
+          const fadeEnd = desktop ? 0.99 : 1;
+          const motionEnd = desktop ? 0.97 : 1;
+          const entry = desktop ? 0.035 : 0.08;
           let flightTween: gsap.core.Tween | undefined;
           let butterflyIsActive = false;
 
