@@ -25,7 +25,7 @@ export function Footer() {
           </nav>
         </div>
         <div className="footer-bottom">
-          <span>BEYBE · Fabricación propia</span>
+          <span>BEYBE · Fabricación propia desde 1998</span>
           <span>Precios expresados en pesos argentinos.</span>
           <Link href="/creditos">Imágenes de referencia</Link>
         </div>

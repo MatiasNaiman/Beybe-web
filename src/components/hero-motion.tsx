@@ -1,16 +1,28 @@
 "use client";
+
 import { useRef, type ReactNode } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { MotionPathPlugin } from "gsap/MotionPathPlugin";
+import {
+  collectExperimentalButterflyParts,
+  createExperimentalButterflyMotion,
+  prepareExperimentalButterfly,
+  setExperimentalButterflyPose,
+  type ButterflyTurnDirection,
+} from "./experimental-butterfly-motion";
+
 gsap.registerPlugin(useGSAP, ScrollTrigger, MotionPathPlugin);
 
 export function HeroMotion({ children }: { children: ReactNode }) {
   const scope = useRef<HTMLDivElement>(null);
+  const turnDirection = useRef<ButterflyTurnDirection>("left");
+
   useGSAP(
     () => {
       const mm = gsap.matchMedia();
+
       mm.add(
         {
           all: "all",
@@ -20,10 +32,10 @@ export function HeroMotion({ children }: { children: ReactNode }) {
         },
         (context) => {
           if (!scope.current || context.conditions?.reduced) return;
+
           const root = scope.current;
           const desktop = Boolean(context.conditions?.desktop);
           const hero = root.querySelector<HTMLElement>(".campaign-hero")!;
-          const photo = root.querySelector<HTMLElement>(".campaign-image")!;
           const flight = root.querySelector<HTMLElement>(".campaign-flight")!;
           const actions = gsap.utils.toArray<HTMLElement>(
             ".campaign-actions > div",
@@ -32,29 +44,41 @@ export function HeroMotion({ children }: { children: ReactNode }) {
           const header = () =>
             document.querySelector<HTMLElement>(".site-header")?.offsetHeight ??
             0;
-          // Short screens retain normal scrolling so buying controls cannot be pinned offscreen.
           const canPin =
             Boolean(context.conditions?.tall) &&
             hero.offsetHeight <= window.innerHeight - header();
-          const points = desktop
-            ? canPin
-              ? [
-                  [0.59, -0.08],
-                  [0.61, 0.08],
-                  [0.57, 0.21],
-                  [0.6, 0.34],
-                  [0.56, 0.48],
-                  [0.59, 0.64],
-                  [0.6, 1.1],
-                ]
-              : [
-                  [0.59, 0.16],
-                  [0.61, 0.3],
-                  [0.57, 0.45],
-                  [0.6, 0.62],
-                  [0.6, 1.1],
-                ]
-            : canPin
+
+          const butterflyParts = collectExperimentalButterflyParts(root);
+          prepareExperimentalButterfly(butterflyParts);
+          setExperimentalButterflyPose(butterflyParts, "open");
+
+          const butterflyMotion = createExperimentalButterflyMotion(
+            butterflyParts,
+            "sequence",
+            {
+              paused: true,
+              getTurnDirection: () => turnDirection.current,
+            },
+          );
+
+          const route = () => {
+            const width = hero.offsetWidth;
+            const height = hero.offsetHeight;
+            const halfButterfly = Math.max(flight.offsetWidth / 2, 48);
+            const edgeGap = desktop ? 20 : 12;
+            const minX = halfButterfly + edgeGap;
+            const maxX = width - halfButterfly - edgeGap;
+
+            const desktopShape: Array<[number, number]> = [
+              [0.82, 0.01],
+              [0.76, 0.14],
+              [0.8, 0.28],
+              [0.68, 0.44],
+              [0.72, 0.62],
+              [0.79, 0.8],
+              [0.86, 0.98],
+            ];
+            const mobileShape: Array<[number, number]> = canPin
               ? [
                   [0.88, 0.08],
                   [0.92, 0.2],
@@ -63,6 +87,9 @@ export function HeroMotion({ children }: { children: ReactNode }) {
                   [0.88, 0.61],
                   [0.94, 0.72],
                   [0.96, 0.78],
+                  [0.94, 0.88],
+                  [0.92, 1.23],
+                  [0.86, 1.23],
                 ]
               : [
                   [0.88, 0.06],
@@ -72,125 +99,178 @@ export function HeroMotion({ children }: { children: ReactNode }) {
                   [0.88, 0.59],
                   [0.94, 0.7],
                   [0.96, 0.76],
+                  [0.94, 0.86],
+                  [0.92, 1.23],
+                  [0.86, 1.23],
                 ];
-          const route = () =>
-            points.map(([x, y]) => ({
-              x: x * photo.offsetWidth,
-              y: y * (desktop ? photo.offsetHeight : hero.offsetHeight),
-            }));
-          gsap.set(flight, { xPercent: -50, yPercent: -50, autoAlpha: 0 });
-          const flap = gsap.timeline({ repeat: -1, paused: true });
-          flap
-            .to(
-              ".campaign-wing-left",
-              {
-                scaleX: 0.92,
-                rotation: -2,
-                svgOrigin: "480 106",
-                duration: 0.34,
-                ease: "sine.inOut",
-              },
-              0,
-            )
-            .to(
-              ".campaign-wing-right",
-              {
-                scaleX: 0.93,
-                rotation: 2,
-                svgOrigin: "500 106",
-                duration: 0.34,
-                ease: "sine.inOut",
-              },
-              0.025,
-            )
-            .to(
-              ".campaign-wing-left",
-              { scaleX: 1, rotation: 0, duration: 0.34, ease: "sine.inOut" },
-              0.34,
-            )
-            .to(
-              ".campaign-wing-right",
-              { scaleX: 1, rotation: 0, duration: 0.34, ease: "sine.inOut" },
-              0.365,
-            );
-          const fadeStart = desktop ? 0.82 : 0.7;
-          const fadeEnd = desktop ? 0.97 : 0.84;
-          const motionEnd = desktop ? 0.92 : 0.78;
-          const entry = desktop ? 0.06 : 0.08;
-          const updateFlap = (progress: number) => {
-            if (!document.hidden && progress > entry && progress < fadeEnd)
-              flap.play();
-            else flap.pause();
+            const shape = desktop ? desktopShape : mobileShape;
+            const points = shape.map(([x, y]) => {
+              const pointY = y * height;
+              const desiredX = x * width;
+              return {
+                x: gsap.utils.clamp(minX, maxX, desiredX),
+                y: pointY,
+              };
+            });
+            const rotationLimit = desktop ? 10 : 9;
+            const rotations = points.map((point, index) => {
+              const previous = points[Math.max(0, index - 1)];
+              const next = points[Math.min(points.length - 1, index + 1)];
+              const dx = next.x - previous.x;
+              const dy = Math.max(Math.abs(next.y - previous.y), height * 0.06);
+              const tangent = (Math.atan2(dx, dy) * 180) / Math.PI;
+              return gsap.utils.clamp(
+                -rotationLimit,
+                rotationLimit,
+                tangent * (desktop ? 0.3 : 0.34),
+              );
+            });
+
+            return { points, rotations };
           };
+
+          gsap.set(flight, {
+            xPercent: -50,
+            yPercent: -50,
+            autoAlpha: 0,
+          });
+
+          const fadeStart = desktop ? 0.84 : 0.97;
+          const fadeEnd = desktop ? 1 : 1;
+          const motionEnd = desktop ? 0.94 : 1;
+          const entry = desktop ? 0.045 : 0.08;
           let flightTween: gsap.core.Tween | undefined;
+          let butterflyIsActive = false;
+
+          const syncButterflyPlayback = () => {
+            if (butterflyIsActive && !document.hidden) {
+              butterflyMotion.resume();
+            } else {
+              butterflyMotion.pause();
+            }
+          };
+
           const story = gsap.timeline({
             scrollTrigger: {
               trigger: hero,
               start: () => `top top+=${header() + (canPin ? 0 : 60)}`,
               end: () =>
-                `+=${canPin ? window.innerHeight * (desktop ? 1.12 : 1.05) : Math.min(desktop ? 480 : 560, window.innerHeight * (desktop ? 0.76 : 0.95))}`,
+                `+=${
+                  canPin
+                    ? window.innerHeight * (desktop ? 0.98 : 1.05)
+                    : Math.min(
+                        desktop ? 430 : 560,
+                        window.innerHeight * (desktop ? 0.68 : 0.95),
+                      )
+                }`,
               pin: canPin,
               scrub: 0.25,
               invalidateOnRefresh: true,
-              onUpdate: (self) => updateFlap(self.progress),
               onRefreshInit: () => {
-                if (flightTween)
-                  flightTween.vars.motionPath = {
-                    path: route(),
-                    curviness: 1.4,
-                    fromCurrent: false,
-                    autoRotate: false,
-                  };
+                if (!flightTween) return;
+                flightTween.vars.motionPath = {
+                  path: route().points,
+                  curviness: desktop ? 1.15 : 1.35,
+                  fromCurrent: false,
+                  autoRotate: false,
+                };
+                flightTween.invalidate();
+              },
+              onUpdate: (self) => {
+                turnDirection.current = self.direction < 0 ? "right" : "left";
+                butterflyIsActive =
+                  self.isActive &&
+                  self.progress >= entry * 0.65 &&
+                  self.progress < fadeEnd;
+                syncButterflyPlayback();
+              },
+              onToggle: (self) => {
+                butterflyIsActive =
+                  self.isActive &&
+                  self.progress >= entry * 0.65 &&
+                  self.progress < fadeEnd;
+                syncButterflyPlayback();
               },
             },
           });
-          story
-            .to(
+
+          const currentRoute = route();
+          story.to(
+            flight,
+            {
+              motionPath: {
+                path: currentRoute.points,
+                curviness: desktop ? 1.15 : 1.35,
+                fromCurrent: false,
+                autoRotate: false,
+              },
+              duration: motionEnd,
+              ease: "none",
+            },
+            0,
+          );
+          const pathTweens = story.getChildren(false, true, false);
+          flightTween = pathTweens[pathTweens.length - 1] as gsap.core.Tween;
+
+          const segmentDuration = motionEnd / (currentRoute.points.length - 1);
+          currentRoute.points.slice(1).forEach((_, index) => {
+            story.to(
               flight,
               {
-                motionPath: {
-                  path: route(),
-                  curviness: 1.4,
-                  fromCurrent: false,
-                  autoRotate: false,
-                },
-                duration: motionEnd,
-                ease: "none",
+                rotation: () => route().rotations[index + 1],
+                duration: segmentDuration,
+                ease: "sine.inOut",
               },
-              0,
-            )
+              index * segmentDuration,
+            );
+          });
+
+          story
             .fromTo(
               flight,
-              { autoAlpha: 0, scale: 0.84, rotation: -7 },
-              { autoAlpha: 1, scale: 1, duration: 0.16, ease: "sine.inOut" },
+              { autoAlpha: 0, scale: 0.96 },
+              { autoAlpha: 1, scale: 1, duration: 0.14, ease: "sine.inOut" },
               entry,
             )
             .to(
               flight,
-              { rotation: 8, scale: 1.06, duration: 0.22, ease: "sine.inOut" },
-              0.26,
+              {
+                scale: desktop ? 1.025 : 1.04,
+                duration: 0.2,
+                ease: "sine.inOut",
+              },
+              0.32,
             )
             .to(
               flight,
-              { rotation: -5, scale: 1, duration: 0.22, ease: "sine.inOut" },
-              0.48,
+              {
+                scale: desktop ? 0.99 : 0.98,
+                duration: 0.19,
+                ease: "sine.inOut",
+              },
+              0.52,
+            )
+            .to(
+              flight,
+              {
+                scale: desktop ? 1.018 : 1.02,
+                duration: 0.16,
+                ease: "sine.inOut",
+              },
+              0.68,
             )
             .to(
               flight,
               {
                 autoAlpha: 0,
-                scale: 0.9,
+                scale: 0.96,
                 duration: fadeEnd - fadeStart,
                 ease: "sine.inOut",
               },
               fadeStart,
             )
-            .to({}, { duration: 1 - fadeEnd }, fadeEnd);
-          flightTween = story.getChildren(
-            false,
-            true,
-            false,
-          )[0] as gsap.core.Tween;
+            .to({}, { duration: Math.max(0, 1 - fadeEnd) }, fadeEnd);
+
           story.fromTo(
             actions,
             { y: 4 },
@@ -202,27 +282,47 @@ export function HeroMotion({ children }: { children: ReactNode }) {
             },
             0.04,
           );
-          // Keyboard users get the actions without a required scroll gesture.
+
+          const bridge = root.querySelector<HTMLElement>(".campaign-bridge");
+          if (bridge) {
+            gsap.from(bridge.children, {
+              y: 7,
+              opacity: 0.88,
+              duration: 0.36,
+              stagger: 0.045,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: bridge,
+                start: "top 94%",
+                once: true,
+              },
+              clearProps: "transform,opacity",
+            });
+          }
+
           const keyboard = (event: KeyboardEvent) => {
-            if (event.key === "Tab") root.classList.add("campaign-keyboard");
-            if (event.key === "Tab")
-              gsap.set(actions, { autoAlpha: 1, y: 0, overwrite: true });
+            if (event.key !== "Tab") return;
+            root.classList.add("campaign-keyboard");
+            gsap.set(actions, { autoAlpha: 1, y: 0, overwrite: true });
           };
-          const visibility = () =>
-            updateFlap(story.scrollTrigger?.progress ?? 0);
+          const visibility = () => syncButterflyPlayback();
           document.addEventListener("keydown", keyboard);
           document.addEventListener("visibilitychange", visibility);
+
           return () => {
+            butterflyMotion.kill();
             root.classList.remove("campaign-keyboard");
             document.removeEventListener("keydown", keyboard);
             document.removeEventListener("visibilitychange", visibility);
           };
         },
       );
+
       return () => mm.revert();
     },
     { scope },
   );
+
   return (
     <div className="campaign-story" ref={scope}>
       {children}

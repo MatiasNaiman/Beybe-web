@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowDown } from "lucide-react";
 import { HeroMotion } from "./hero-motion";
-import { CampaignButterfly } from "./campaign-butterfly";
+import { ExperimentalButterfly } from "./experimental-butterfly";
 
 export function CampaignHero() {
   return (
@@ -64,7 +64,7 @@ export function CampaignHero() {
           </div>
         </div>
         <div className="campaign-flight" aria-hidden="true">
-          <CampaignButterfly />
+          <ExperimentalButterfly />
         </div>
       </section>
       <div className="campaign-bridge container" data-story-section="discovery">

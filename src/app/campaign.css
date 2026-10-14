@@ -98,9 +98,9 @@
   text-align: center;
   text-decoration: none;
   transition:
-    background 0.2s,
-    color 0.2s,
-    transform 0.2s;
+    background var(--motion-control) var(--ease-out),
+    color var(--motion-control) var(--ease-out),
+    transform var(--motion-tap) var(--ease-out);
 }
 .campaign-button-secondary {
   color: #29483d;
@@ -110,6 +110,9 @@
   background: #406454;
   color: #fff9f1;
   transform: translateY(-1px);
+}
+.campaign-button:active {
+  transform: scale(0.98);
 }
 .campaign-button:focus-visible {
   outline: 2px solid #29483d;
@@ -136,6 +139,12 @@
   pointer-events: none;
 }
 .campaign-butterfly {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+.campaign-flight .experimental-butterfly {
   display: block;
   width: 100%;
   height: auto;
@@ -224,8 +233,9 @@
     padding: 8px 12px;
   }
   .campaign-flight {
-    width: 7%;
-    max-width: 115px;
+    z-index: 1;
+    width: clamp(112px, 8.5vw, 132px);
+    max-width: none;
   }
   .campaign-bridge {
     flex-direction: row;

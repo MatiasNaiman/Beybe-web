@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Menu, ShoppingBag, X } from "lucide-react";
 import { Brand } from "./brand";
 import { containDialogFocus } from "./dialog-focus";
@@ -16,6 +16,8 @@ export function Header() {
   const dialog = useRef<HTMLDialogElement>(null);
   const menuButton = useRef<HTMLButtonElement>(null);
   const { carts } = useShop();
+  const announcement = useRef<HTMLDivElement>(null);
+  const [compact, setCompact] = useState(false);
   const count = [...carts.minorista, ...carts.mayorista].reduce(
     (sum, i) => sum + i.quantity,
     0,
@@ -32,10 +34,22 @@ export function Header() {
     desktop.addEventListener("change", closeOnDesktop);
     return () => desktop.removeEventListener("change", closeOnDesktop);
   }, []);
+  useEffect(() => {
+    const target = announcement.current;
+    if (!target) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setCompact(!entry.isIntersecting),
+      { threshold: 0 },
+    );
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, []);
   return (
     <>
-      <div className="announcement">Fabricación propia desde 1998</div>
-      <header className="site-header">
+      <div ref={announcement} className="announcement">
+        Fabricación propia desde 1998
+      </div>
+      <header className={`site-header${compact ? " is-compact" : ""}`}>
         <div className="container header-inner">
           <button
             ref={menuButton}
@@ -71,7 +85,9 @@ export function Header() {
             >
               <ShoppingBag size={21} strokeWidth={1.5} />
               {count > 0 && (
-                <span className="bag-count">{count > 99 ? "99+" : count}</span>
+                <span key={count} className="bag-count">
+                  {count > 99 ? "99+" : count}
+                </span>
               )}
             </Link>
           </div>

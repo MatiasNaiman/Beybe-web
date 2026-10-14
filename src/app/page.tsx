@@ -42,16 +42,28 @@ export default async function Home() {
               Ver todos los artículos →
             </Link>
           </div>
+          <p className="featured-demo-note">
+            Selección demostrativa. Imágenes y precios provisionales.
+          </p>
           <Reveal>
-            <div className="product-grid">
-              {featured.map((p, i) => (
-                <ProductCard
-                  key={p.id}
-                  product={p}
-                  channel="minorista"
-                  index={i}
-                />
-              ))}
+            <div className="featured-editorial">
+              <ProductCard
+                product={featured[0]}
+                channel="minorista"
+                index={0}
+                layout="featured-lead"
+              />
+              <div className="featured-secondary-list">
+                {featured.slice(1).map((p, i) => (
+                  <ProductCard
+                    key={p.id}
+                    product={p}
+                    channel="minorista"
+                    index={i + 1}
+                    layout="featured-secondary"
+                  />
+                ))}
+              </div>
             </div>
           </Reveal>
         </section>
@@ -59,21 +71,6 @@ export default async function Home() {
       <div className="container">
         <WholesaleBanner />
       </div>
-      <section className="story-teaser container" data-story-section="heritage">
-        <div className="story-mark">
-          1998<span>El comienzo de nuestra historia</span>
-        </div>
-        <div>
-          <h2>Desde 1998, parte de sus primeros días.</h2>
-          <p>
-            Somos fabricantes. Elegimos acompañar a las familias con nuestra
-            propia manera de hacer.
-          </p>
-          <Link className="text-link" href="/nosotros">
-            Conocé nuestra historia <span aria-hidden="true">→</span>
-          </Link>
-        </div>
-      </section>
     </>
   );
 }
